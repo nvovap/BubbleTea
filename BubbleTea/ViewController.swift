@@ -15,9 +15,14 @@ class ViewController: UITableViewController {
     
     var coreDataStack: CoreDataStack!
 
+    var fetchRequest: NSFetchRequest? 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+//        fetchRequest = coreDataStack.context.persistentStoreCoordinator?.managedObjectModel.fetchRequestTemplatesByName("  ")
+        fetchRequest = Venue.fetchRequest() as Array<Venue>
+        
     }
 
     override func didReceiveMemoryWarning() {
