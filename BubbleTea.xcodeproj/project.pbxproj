@@ -13,6 +13,9 @@
 		32FF6BE51DDC5F0800F4689C /* BubbleTea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 32FF6BE31DDC5F0800F4689C /* BubbleTea.xcdatamodeld */; };
 		32FF6BE71DDC5F0800F4689C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32FF6BE61DDC5F0800F4689C /* Assets.xcassets */; };
 		32FF6BEA1DDC5F0800F4689C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32FF6BE81DDC5F0800F4689C /* LaunchScreen.storyboard */; };
+		32FF6BF21DDC6CEF00F4689C /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF6BF11DDC6CEF00F4689C /* FilterViewController.swift */; };
+		32FF6BF41DDC917100F4689C /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 32FF6BF31DDC917000F4689C /* seed.json */; };
+		32FF6BF61DDCAD2F00F4689C /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF6BF51DDCAD2F00F4689C /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		32FF6BE61DDC5F0800F4689C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32FF6BE91DDC5F0800F4689C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		32FF6BEB1DDC5F0800F4689C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		32FF6BF11DDC6CEF00F4689C /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		32FF6BF31DDC917000F4689C /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
+		32FF6BF51DDCAD2F00F4689C /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +62,12 @@
 		32FF6BDB1DDC5F0800F4689C /* BubbleTea */ = {
 			isa = PBXGroup;
 			children = (
+				32FF6BF31DDC917000F4689C /* seed.json */,
 				32FF6BDC1DDC5F0800F4689C /* AppDelegate.swift */,
+				32FF6BF51DDCAD2F00F4689C /* CoreDataStack.swift */,
 				32FF6BDE1DDC5F0800F4689C /* ViewController.swift */,
 				32FF6BE01DDC5F0800F4689C /* Main.storyboard */,
+				32FF6BF11DDC6CEF00F4689C /* FilterViewController.swift */,
 				32FF6BE61DDC5F0800F4689C /* Assets.xcassets */,
 				32FF6BE81DDC5F0800F4689C /* LaunchScreen.storyboard */,
 				32FF6BEB1DDC5F0800F4689C /* Info.plist */,
@@ -129,6 +138,7 @@
 			files = (
 				32FF6BEA1DDC5F0800F4689C /* LaunchScreen.storyboard in Resources */,
 				32FF6BE71DDC5F0800F4689C /* Assets.xcassets in Resources */,
+				32FF6BF41DDC917100F4689C /* seed.json in Resources */,
 				32FF6BE21DDC5F0800F4689C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,8 +150,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32FF6BF61DDCAD2F00F4689C /* CoreDataStack.swift in Sources */,
 				32FF6BDF1DDC5F0800F4689C /* ViewController.swift in Sources */,
 				32FF6BDD1DDC5F0800F4689C /* AppDelegate.swift in Sources */,
+				32FF6BF21DDC6CEF00F4689C /* FilterViewController.swift in Sources */,
 				32FF6BE51DDC5F0800F4689C /* BubbleTea.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
