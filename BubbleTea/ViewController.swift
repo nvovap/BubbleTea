@@ -7,22 +7,42 @@
 //
 
 import UIKit
+import CoreData
 
 let filterViewControllerSegueIdentifier = "toFilterViewController"
 let venueCellIdentifier = "VenueCell"
+
 
 class ViewController: UITableViewController {
     
     var coreDataStack: CoreDataStack!
 
-    var fetchRequest: NSFetchRequest? 
+    var fetchRequest: NSFetchRequest<Venue>!
+    
+  //  var venues: [NSAsynchronousFetchResult<Venue>]!
+    
+    var venues: [Venue]!
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        fetchRequest = coreDataStack.context.persistentStoreCoordinator?.managedObjectModel.fetchRequestTemplatesByName("  ")
-        fetchRequest = Venue.fetchRequest() as Array<Venue>
+        let model = coreDataStack.context.persistentStoreCoordinator!.managedObjectModel
         
+        fetchRequest = model.fetchRequestTemplate(forName: "FetchRequest") as! NSFetchRequest<Venue>
+        fetchAndReload()
+    }
+    
+   
+    
+    func fetchAndReload() {
+        do {
+            venues = try coreDataStack.context.fetch(fetchRequest) as [Venue]
+        
+            tableView.reloadData()
+        } catch let error {
+            print(error)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,28 +57,26 @@ class ViewController: UITableViewController {
             
         }
     }
-    
-  
 
 }
 
 
 extension ViewController {
     
-
-    
-   
-    
     override func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return venues.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: venueCellIdentifier)!
-        cell.textLabel!.text = "Bubble Tea Venue"
-        cell.detailTextLabel!.text = "Price Info"
+        
+        let item = venues[indexPath.row]
+
+        
+        cell.textLabel!.text =  item.name
+        cell.detailTextLabel!.text = item.priceInfo?.priceCategory
         
         return cell
     }
