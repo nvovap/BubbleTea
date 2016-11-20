@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class FilterViewController: UITableViewController {
 
@@ -36,11 +37,93 @@ class FilterViewController: UITableViewController {
     
     
     
+    var coreDataStack: CoreDataStack!
+    
+    
+    lazy var cheapVenuePredicate: NSPredicate = {
+        var predicate = NSPredicate(format: "priceInfo.priceCategory == %@", "$")
+        
+        return predicate
+    }()
+    
+    lazy var moderateVenuePredicate: NSPredicate = {
+        var predicate = NSPredicate(format: "priceInfo.priceCategory == %@", "$$")
+        
+        return predicate
+    }()
+    
+    lazy var expensiveVenuePredicate: NSPredicate = {
+        var predicate = NSPredicate(format: "priceInfo.priceCategory == %@", "$$$")
+        
+        return predicate
+    }()
+    
+    func populateCheapVenueCountLabel() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Venue")
+        fetchRequest.resultType = .countResultType
+        fetchRequest.predicate = cheapVenuePredicate
+        
+        do {
+            let results = try coreDataStack.context.fetch(fetchRequest) as! [Int]
+            
+            let count = results.first!
+        
+            
+            firstPriceCategoryLabel.text = "\(count) bubble tea places"
+        }catch let error {
+            print(error)
+        }
+        
+    }
+    
+    func populateModerateVenueCountLabel() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Venue")
+        fetchRequest.resultType = .countResultType
+        fetchRequest.predicate = moderateVenuePredicate
+        
+        do {
+            let results = try coreDataStack.context.fetch(fetchRequest) as! [Int]
+            
+            let count = results.first!
+            
+            
+            secondPriceCategoryLabel.text = "\(count) bubble tea places"
+        }catch let error {
+            print(error)
+        }
+        
+    }
+    
+    func populateExpensiveVenueCountLabel() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Venue")
+      //  fetchRequest.resultType = .countResultType
+        fetchRequest.predicate = expensiveVenuePredicate
+        
+        do {
+            let count = try coreDataStack.context.count(for: fetchRequest)
+            
+            
+            if count != NSNotFound {
+                thirdPriceCategoryLabel.text = "\(count) bubble tea places"
+            } else {
+                print("Could not fetch")
+            }
+            
+        }catch let error {
+            print(error)
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        populateCheapVenueCountLabel()
+        populateModerateVenueCountLabel()
+        populateExpensiveVenueCountLabel()
     }
 
     override func didReceiveMemoryWarning() {

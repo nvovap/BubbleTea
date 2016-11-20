@@ -54,7 +54,11 @@ class ViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == filterViewControllerSegueIdentifier {
+            let navigationController = segue.destination as! UINavigationController
             
+            let filterViewController = navigationController.topViewController  as! FilterViewController
+            
+            filterViewController.coreDataStack = coreDataStack
         }
     }
 
