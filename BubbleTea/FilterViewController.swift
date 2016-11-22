@@ -9,6 +9,11 @@
 import UIKit
 import CoreData
 
+protocol FilterViewControllerDelegate: class {
+    func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?)
+}
+
+
 class FilterViewController: UITableViewController {
 
     
@@ -34,6 +39,12 @@ class FilterViewController: UITableViewController {
     @IBOutlet weak var nameZASortCell: UITableViewCell!
     @IBOutlet weak var distanceSortCell: UITableViewCell!
     @IBOutlet weak var priceSortCell: UITableViewCell!
+    
+    
+    weak var delegate: FilterViewControllerDelegate?
+    var selectedSortDescriptor: NSSortDescriptor?
+    var selectedPredicate: NSPredicate?
+    
     
     
     
@@ -118,12 +129,45 @@ class FilterViewController: UITableViewController {
         
     }
     
+    func popularDealsCountLabel() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Venue")
+        
+        
+        fetchRequest.resultType = .dictionaryResultType
+        
+        //--------------SUMMA specialCount ----------------------
+        let sumExpressionDesc = NSExpressionDescription()
+        sumExpressionDesc.name = "sumDeals"
+        sumExpressionDesc.expression = NSExpression(forFunction: "sum:", arguments: [NSExpression(forKeyPath: "specialCount")])
+        sumExpressionDesc.expressionResultType = .integer32AttributeType
+        //-------------------------------------------------------
+        
+        
+        
+        fetchRequest.propertiesToFetch = [sumExpressionDesc]
+        
+        do{
+            let results = try coreDataStack.context.fetch(fetchRequest) as! [NSDictionary]
+            
+            let resultDict = results.first!
+            let numDeals = resultDict["sumDeals"]
+            
+            numDealsLabel.text = "\(numDeals!) total deals"
+            
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         populateCheapVenueCountLabel()
         populateModerateVenueCountLabel()
         populateExpensiveVenueCountLabel()
+        
+        popularDealsCountLabel()
     }
 
     override func didReceiveMemoryWarning() {
@@ -135,9 +179,30 @@ class FilterViewController: UITableViewController {
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         
+        delegate?.filterViewController(filter: self, didSelectPredicate: selectedPredicate, sortDescriptor: selectedSortDescriptor)
+        
         dismiss(animated: true, completion: nil)
     }
 
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+        
+        switch cell {
+        case cheapVenueCell:
+            selectedPredicate = cheapVenuePredicate
+        case moderateVenueCell:
+            selectedPredicate = moderateVenuePredicate
+        case expensiveVenueCell:
+            selectedPredicate = expensiveVenuePredicate
+        default:
+            print("default case")
+        }
+        
+        cell.accessoryType = .checkmark
+    }
+    
+    
     /*
     // MARK: - Navigation
 

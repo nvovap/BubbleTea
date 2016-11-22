@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let jsonDict2 = jsonDict["response"]  as! Dictionary<String, Any>
           
-            let jsonArray = jsonDict2["venues"] as! Array<AnyObject>
+            let jsonArray = jsonDict2["venues"] as! Array<Dictionary<String, Any>>
                 
             
             
@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 let venueName = jsonDictionary["name"] as? String
                 let venuePhone = (jsonDictionary as AnyObject).value(forKeyPath: "contact.phone") as? String
-                let specialCount = (jsonDictionary as AnyObject).value(forKeyPath: "specials.count") as? NSNumber
+                let specialCount = (jsonDictionary as AnyObject).value(forKeyPath: "specials.count")
                 
                 let locationDict = jsonDictionary["location"] as! NSDictionary
                 let priceDict = jsonDictionary["price"] as! NSDictionary
@@ -100,7 +100,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 location.city = locationDict["city"] as? String
                 location.state = locationDict["state"] as? String
                 location.zipcode = locationDict["postalCode"] as? String
-                location.distance = locationDict["distance"] as? NSNumber as! Float
+                
+                
+                if let distance = locationDict["distance"] as? Float {
+                    location.distance = distance
+                }
+                
+               
                 
                 let category = Category(entity: categoryEntity!, insertInto: coreDataStack.context)
                 
@@ -108,23 +114,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 priceInfo.priceCategory = priceDict["currency"] as? String
                 
                 let stats = Stats(entity: statsEntity!, insertInto: coreDataStack.context)
-                stats.checkinsCount = statsDict["checkinsCount"] as? NSNumber as! Int32
                 
                 
-                if let usersCount = statsDict["userCount"] {
-                    stats.usersCount = usersCount as! Int32
+                if let checkinsCount = statsDict["checkinsCount"] as? Int32 {
+                     stats.checkinsCount = checkinsCount
+                }
+  
+                
+                
+                if let usersCount = statsDict["userCount"] as? Int32 {
+                    stats.usersCount = usersCount
                 }
                 
                 
-                if let tipCount = statsDict["tipCount"] {
-                    stats.tipCount =  tipCount as! Int32
+                if let tipCount = statsDict["tipCount"] as? Int32 {
+                    stats.tipCount =  tipCount
                 }
                 
                 let venue = Venue(entity: venueEntity!, insertInto: coreDataStack.context)
                 venue.name = venueName
                 venue.phone = venuePhone
                 
-                venue.specialCount = specialCount as! Int32
+                
+                if let specialCount = specialCount as? Int32 {
+                    venue.specialCount = specialCount
+                }
+                
+                
                 
                 
                 venue.location = location
