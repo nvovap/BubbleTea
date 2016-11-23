@@ -69,6 +69,45 @@ class FilterViewController: UITableViewController {
         return predicate
     }()
     
+    
+    lazy var offeringDealPredicate: NSPredicate = {
+        var pr = NSPredicate(format: "specialCount > 0")
+        
+        return pr
+    }()
+    
+    lazy var walkingDistancePredicate: NSPredicate = {
+        var pr = NSPredicate(format: "location.distance < 500")
+        
+        return pr
+    }()
+    
+    lazy var hasUserTipsPredicate: NSPredicate = {
+        var pr = NSPredicate(format: "stats.tipCount > 0")
+        
+        return pr
+    }()
+    
+    
+    lazy var nameSortDescriptor: NSSortDescriptor = {
+        var sd = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+        
+        return sd
+    }()
+    
+    lazy var distanceSortDescriptor: NSSortDescriptor = {
+        var sd = NSSortDescriptor(key: "location.distance", ascending: true)
+        
+        return sd
+    }()
+    
+    lazy var priceSortDescriptor: NSSortDescriptor = {
+        var sd = NSSortDescriptor(key: "priceInfo.priceCategory", ascending: true)
+        
+        return sd
+    }()
+    
+    
     func populateCheapVenueCountLabel() {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Venue")
@@ -185,6 +224,13 @@ class FilterViewController: UITableViewController {
     }
 
     
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+        
+        cell.accessoryType = .none
+        
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)!
         
@@ -195,6 +241,21 @@ class FilterViewController: UITableViewController {
             selectedPredicate = moderateVenuePredicate
         case expensiveVenueCell:
             selectedPredicate = expensiveVenuePredicate
+        case offeringDealCell:
+            selectedPredicate = offeringDealPredicate
+        case walkingDistanceCell:
+            selectedPredicate = walkingDistancePredicate
+        case userTipsCell:
+            selectedPredicate = hasUserTipsPredicate
+        //Sort By section
+        case nameAZSortCell:
+            selectedSortDescriptor = nameSortDescriptor
+        case nameZASortCell:
+            selectedSortDescriptor = nameSortDescriptor.reversedSortDescriptor as? NSSortDescriptor
+        case distanceSortCell:
+            selectedSortDescriptor = distanceSortDescriptor
+        case priceSortCell:
+            selectedSortDescriptor = priceSortDescriptor
         default:
             print("default case")
         }

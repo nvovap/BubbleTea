@@ -15,6 +15,8 @@ let venueCellIdentifier = "VenueCell"
 
 class ViewController: UITableViewController {
     
+   // var asyncFetchRequest: NSAsynchronousFetchRequest<Venue>!
+    
     var coreDataStack: CoreDataStack!
 
     var fetchRequest: NSFetchRequest<Venue>!
@@ -26,10 +28,30 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let model = coreDataStack.context.persistentStoreCoordinator!.managedObjectModel
         
-        fetchRequest = model.fetchRequestTemplate(forName: "FetchRequest") as! NSFetchRequest<Venue>
+        
+
+//        let model = coreDataStack.context.persistentStoreCoordinator!.managedObjectModel
+//        
+//        fetchRequest = model.fetchRequestTemplate(forName: "FetchRequest") as! NSFetchRequest<Venue>
+        
+        fetchRequest = NSFetchRequest(entityName: "Venue")
+        
+//        asyncFetchRequest = NSAsynchronousFetchRequest<Venue>(fetchRequest: fetchRequest){[unowned self] (result: NSAsynchronousFetchResult<Venue>) in
+//            self.venues = result.finalResult
+//            self.tableView.reloadData()
+//        }
+//        
+//        
+//        do {
+//            try coreDataStack.context.fetch(asyncFetchRequest)
+//        } catch let error {
+//            print(error)
+//        }
+        
+        
+        
+        
         fetchAndReload()
     }
     
@@ -58,12 +80,34 @@ class ViewController: UITableViewController {
             
             let filterViewController = navigationController.topViewController  as! FilterViewController
             
+            filterViewController.delegate = self
+            
             filterViewController.coreDataStack = coreDataStack
         }
     }
 
 }
 
+
+//MARK: FilterViewControllerDelegate
+
+extension ViewController: FilterViewControllerDelegate {
+    func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?) {
+        
+         fetchRequest.predicate = nil
+        fetchRequest.sortDescriptors = nil
+        
+        if let fetchPredicate = predicate {
+            fetchRequest.predicate = fetchPredicate
+        }
+        
+        if let sr = sortDescriptor {
+            fetchRequest.sortDescriptors = [sr]
+        }
+        
+        fetchAndReload()
+    }
+}
 
 extension ViewController {
     
